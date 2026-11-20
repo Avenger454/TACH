@@ -76,12 +76,13 @@ void ui_Screen1_screen_init(void)
     lv_label_set_text(rpm_label, "0");
     lv_obj_center(rpm_label);
 
-    /* Retain the exported name; the pointer is now a narrow radial line.
+    /* Default gauge sweep: opaque bright red radial needle spanning between
+     * the blue arcs. Keep local redraw bounds; do not animate a filled arc.
      * Artwork at zoom 425: inner arch ~224px, outer arch ~352px. */
     ui_rpm_arc = lv_line_create(ui_Screen1);
     lv_obj_remove_style_all(ui_rpm_arc);
     lv_obj_set_pos(ui_rpm_arc, 0, 0);
-    lv_obj_set_style_line_width(ui_rpm_arc, 8, 0);
+    lv_obj_set_style_line_width(ui_rpm_arc, 7, 0);
     lv_obj_set_style_line_color(ui_rpm_arc, lv_color_hex(0xFF0000), 0);
     lv_obj_set_style_line_opa(ui_rpm_arc, LV_OPA_COVER, 0);
     lv_obj_set_style_line_rounded(ui_rpm_arc, false, 0);
