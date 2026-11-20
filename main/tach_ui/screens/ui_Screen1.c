@@ -24,6 +24,31 @@ static lv_point_t pointer_points[2];
 static lv_point_t last_screen_points[2];
 static bool pointer_position_valid;
 
+
+/* Static accents beside the artwork's RPM title. Layered strokes provide
+ * a small red glow without animation or a large shadow redraw area.
+ * Coordinates follow the existing 512px face at zoom 425, centered at 360. */
+static const lv_point_t rpm_accent_points[] = {{0, 0}, {74, 0}};
+
+static void create_rpm_accents(lv_obj_t *parent)
+{
+    static const lv_coord_t widths[] = {10, 6, 3};
+    static const lv_opa_t opacities[] = {24, 64, LV_OPA_COVER};
+    for(unsigned side = 0; side < 2; ++side) {
+        for(unsigned layer = 0; layer < 3; ++layer) {
+            lv_obj_t *stroke = lv_line_create(parent);
+            lv_obj_remove_style_all(stroke);
+            lv_obj_set_pos(stroke, side ? 431 : 211, 220);
+            lv_line_set_points(stroke, rpm_accent_points, 2);
+            lv_obj_set_style_line_width(stroke, widths[layer], 0);
+            lv_obj_set_style_line_color(stroke, lv_color_hex(0xFF0000), 0);
+            lv_obj_set_style_line_opa(stroke, opacities[layer], 0);
+            lv_obj_set_style_line_rounded(stroke, true, 0);
+            lv_obj_clear_flag(stroke, LV_OBJ_FLAG_CLICKABLE);
+        }
+    }
+}
+
 void ui_Screen1_screen_init(void)
 {
     ui_Screen1 = lv_obj_create(NULL);
@@ -35,6 +60,7 @@ void ui_Screen1_screen_init(void)
     /* Fill the 720px circle with the face inside the decorative bezel.
      * The silver ring is outside the screen at this zoom. */
     lv_img_set_zoom(ui_rpm_bg, 425);
+    create_rpm_accents(ui_Screen1);
 
     lv_obj_t *panel = lv_obj_create(ui_Screen1);
     lv_obj_remove_style_all(panel);
